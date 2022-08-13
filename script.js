@@ -153,6 +153,7 @@ const createUsernames = function(accs){
     acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('')
   })  
 } 
+createUsernames(accounts);
 const calcDisplayBalance = function(acc){
   acc.balance = acc.movements.reduce(function(acc, cur){
     return acc+=cur
@@ -167,6 +168,7 @@ const updateUI = function(acc){
 // Event Handlers
 let currentAccount;
 containerApp.style.opacity = 0;
+// Login Functionality 
 btnLogin.addEventListener('click', function(e){
   // By Default, the Submit button in a form element refreshes the page. To prevent this behaviour, the following code
   e.preventDefault();
@@ -189,7 +191,7 @@ btnLogin.addEventListener('click', function(e){
     containerApp.style.opacity = 100;
   }
 })
-
+// Transfer Functionality
 btnTransfer.addEventListener('click', function(e){
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
@@ -199,9 +201,18 @@ btnTransfer.addEventListener('click', function(e){
     currentAccount.movements.push(amount * -1)
     updateUI(currentAccount)
     recieverAccount.movements.push(amount)  
+  }})
+btnClose.addEventListener('click', function(e){
+  e.preventDefault()
+  console.log(currentAccount)
+  if(inputCloseUsername.value == currentAccount.username && inputClosePin.value == currentAccount.pin){
+    const index = accounts.findIndex(function(acc){
+      return acc.username == currentAccount.username
+    })
+    accounts.splice(index, 1)
+    containerApp.style.opacity = 0
   }
 })
-createUsernames(accounts);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES

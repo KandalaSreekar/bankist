@@ -173,3 +173,8 @@ console.log(firstWithdrawl)
 // As we can see, the find method does not return all the negative values in the array. It only returns the first value 
 // that satisfies the condition of less than 0.
 // The filter method returns a new array, but find returns only one element.
+
+// findIndex Method
+// A close cousin of the find method
+// To delete an element from an array, we use the splice method, but the splice method requires you to have 
+// the appropriate index of that element. 
