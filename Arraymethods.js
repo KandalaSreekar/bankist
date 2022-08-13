@@ -178,3 +178,24 @@ console.log(firstWithdrawl)
 // A close cousin of the find method
 // To delete an element from an array, we use the splice method, but the splice method requires you to have 
 // the appropriate index of that element. 
+randomArray = [100,101,102,103,104,105,106,107]
+const indexrequired = randomArray.findIndex(function(oneohone){
+    return oneohone = 101
+})
+console.log(indexrequired)
+
+// Some and Every methods
+// Lets recap the includes method first
+console.log(randomArray.includes(100))
+// The value of the above statement is "True". This is because the randomArray includes the number 100.
+// The include method is used to test if an array includes an element.
+
+// Includes tests for equality, but SOME tests for a condition.
+
+console.log(randomArray.some(function(num){
+    return num>0
+}))
+
+// If any number in the array is greater than 0, then the above some method returns "true"
+// As you can see, some checks a condition.
+
