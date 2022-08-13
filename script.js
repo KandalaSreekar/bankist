@@ -7,7 +7,7 @@
 // Data
 const account1 = {
   owner: "Jonas Schmedtmann",
-  username: "js",
+  // username: "js",
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -27,7 +27,7 @@ const account1 = {
 
 const account2 = {
   owner: "Jessica Davis",
-  username: "jd",
+  // username: "jd",
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
@@ -47,7 +47,7 @@ const account2 = {
 
 const account3 = {
   owner: "Steven Thomas Williams",
-  username: "stw",
+  // username: "stw",
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
@@ -67,7 +67,7 @@ const account3 = {
 
 const account4 = {
   owner: "Sarah Smith",
-  username: "ss",
+  // username: "ss",
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -112,23 +112,25 @@ const inputTransferAmount = document.querySelector(".form__input--amount");
 const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
-const calcDisplaySummary = function(movements){
-  const incomes = movements.filter(function(mov){
+
+
+const calcDisplaySummary = function(acc){
+  const incomes = acc.movements.filter(function(mov){
     return mov>0
   }).reduce(function(acc, mov){
     return acc + mov
   },0)
   labelSumIn.textContent = `${incomes}€`
-  const outgoings = movements.filter(function(mov){
+  const outgoings = acc.movements.filter(function(mov){
     return mov<0
   }).reduce(function(acc, mov){
     return acc + mov
   }, 0)
   labelSumOut.textContent = `${Math.abs(outgoings)}€` 
-  const int = movements.filter(function(mov){
+  const int = acc.movements.filter(function(mov){
     return mov>0
   }).map(function(mov){
-    return mov*0.012
+    return (mov*acc.interestRate)/100
   }).reduce(function(acc, mov){
     return acc +mov
   }, 0)
@@ -146,28 +148,60 @@ const displayMovements = function(movements){
     containerMovements.insertAdjacentHTML('afterbegin', html)
   })
 }
+const createUsernames = function(accs){
+  accs.forEach(function(acc){
+    acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('')
+  })  
+} 
+const calcDisplayBalance = function(acc){
+  acc.balance = acc.movements.reduce(function(acc, cur){
+    return acc+=cur
+  }, 0)
+  labelBalance.textContent = `${acc.balance}€`
+}
+const updateUI = function(acc){
+  displayMovements(acc.movements) 
+  calcDisplayBalance(acc)
+  calcDisplaySummary(acc)
+}
 // Event Handlers
 let currentAccount;
+containerApp.style.opacity = 0;
 btnLogin.addEventListener('click', function(e){
+  // By Default, the Submit button in a form element refreshes the page. To prevent this behaviour, the following code
   e.preventDefault();
+  // is written. 
   currentAccount = accounts.find(function(acc){
     return acc.username === inputLoginUsername.value
   })
   if(currentAccount?.pin === Number(inputLoginPin.value)){
-    labelWelcome.textContent = `Welcome Back! ${currentAccount.owner.split(' ')[0]}`
+    labelWelcome.textContent = `Welcome back ${currentAccount.owner.split(' ')[0]}`
+    // Display a list of movements of this account
     displayMovements(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-    calcDisplaySummary(currentAccount.movements);
-    inputLoginUsername = inputLoginPin = ''
+    // Display the Current Balance on the right hand corner 
+    calcDisplayBalance(currentAccount);
+    // Display a summary of the account info on the bottom.
+    calcDisplaySummary(currentAccount);
+    // Clear input Fields after entering Username and PIN.
+    inputLoginUsername.value = inputLoginPin.value  = ''
+    // Take the focus away from the input fields
+    inputLoginPin.blur();
+    containerApp.style.opacity = 100;
   }
 })
-const calcDisplayBalance = function(movements){
-  const balance = movements.reduce(function(acc, cur){
-    return acc+=cur
-  }, 0)
-  labelBalance.textContent = `${balance}€`
-}
+
+btnTransfer.addEventListener('click', function(e){
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAccount = accounts.find(acc => acc.username === inputTransferTo.value);
+  inputTransferAmount.value = inputTransferTo.value = ''
+  if(amount>0 && amount<currentAccount.balance && recieverAccount && recieverAccount!==currentAccount){
+    currentAccount.movements.push(amount * -1)
+    updateUI(currentAccount)
+    recieverAccount.movements.push(amount)  
+  }
+})
+createUsernames(accounts);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-
