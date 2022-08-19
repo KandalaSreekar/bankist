@@ -199,3 +199,60 @@ console.log(randomArray.some(function(num){
 // If any number in the array is greater than 0, then the above some method returns "true"
 // As you can see, some checks a condition.
 
+// the EVERY method
+// If every element passes a test specified in the callback function, then every returns true.
+
+console.log(`yes ${randomArray.every(function(element){
+    return element>1
+})}`)
+
+// The FLAT Method
+// We can think of the word Flat as the opposite of the word NESTED. We know that a Nested array
+// is an array of arrays. the flat method turns a nested array into a single array with all the 
+// elements part of it. The argument passed into it determines how deep the flat method will go 
+// to flatten out the array. arr.flat(2) → list within a list within a list are flattened.
+
+randomNestedArray = [[1,2,3],4,5,6,[7,8,9]]
+console.log(randomNestedArray.flat())
+// No Callback function here
+// The Flat method goes 1 level deep only.
+
+// FLATMAP method
+// As the name suggests, flatMap is a combination of flat and Map method. 
+
+// Sorting Arrays
+// In computer science, there are a lot of methods of sorting an array.
+const owners = ['Sreekar', 'Zaheer', 'Padmavathi', 'Abhishek']
+console.log(owners.sort())
+// This sort method mutates the array, so now, the owners array is sorted. No copies are created.
+
+// So far we have created arrays explicitly.
+// Like this: const array = [1,2,3,4,5,6]
+// We can also generate arrays programmatically
+const x = new Array(7)
+console.log(x)
+// As we can see, the above code generates an array with 7 empty elements.
+// This type of an empty element array can be filled ONLY with the fill method. 
+x.fill(17)
+// The above line fills the array with that specific element only. This means that x is now an array of 
+// 7 elements and each element is 17.
+console.log(x)
+// Fill method, array.fill(elementToBeFilled, startIndex, endIndex)
+// The fill method is not restricted to empty element arrays. Any array can be filled with the fill method.
+// And as we can see the fill method mutates the underlying array.
+// The From method
+// The below line creates an array of length 10 and each element equating to 3.
+const y = Array.from({length:10}, () => 3)
+// The following is to create an array with 100 dice rolls
+let diceRolls = Array.from({length:10}, function(curr, i){
+    return Math.floor(Math.random() * 6) +1
+})
+console.log(diceRolls)
+// In javascript, there are some data types and structures that are called iterables (Strings, maps, sets). The from
+// method is used to Convert these iterables to arrays. Hence the name "from".
+
+
+// Summary
+// We have learnt many Array methods.(23)
+// In any given situation, we have to choose which Array method to use. To decide, we ask, What do I want this method
+// to do? Do I want to mutate the array or create a copy? etc.

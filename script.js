@@ -225,6 +225,13 @@ btnLoan.addEventListener('click', function(e){
   }
   inputLoanAmount.value = ''
 })
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
+const overallBalance = accounts
+.map(function(acc){
+  return acc.movements 
+})
+.flat()
+.reduce(function(acc, mov){
+  return acc+=mov
+},0)
+
+console.log(overallBalance)
