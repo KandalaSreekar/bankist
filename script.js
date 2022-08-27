@@ -165,6 +165,22 @@ const updateUI = function(acc){
   calcDisplayBalance(acc)
   calcDisplaySummary(acc)
 }
+const startLogoutTimer = function(){
+  // Set time to 5 minutes
+  let time = 120
+  // Call the timer every second.
+  const timer = setInterval(function(){
+    const min = String(Math.trunc(time/60)).padStart(2,0)
+    const sec = String(time%60).padStart(2,0)
+    labelTimer.textContent = `${min}: ${sec}`
+    time--
+    if (time===0){
+      clearInterval(timer)
+      labelWelcome.textContent = `Login to get started`
+      containerApp.style.opacity = 0
+    }
+  },1000)
+}
 // Event Handlers
 let currentAccount;
 containerApp.style.opacity = 0;
@@ -188,6 +204,7 @@ btnLogin.addEventListener('click', function(e){
     inputLoginUsername.value = inputLoginPin.value  = ''
     // Take the focus away from the input fields
     inputLoginPin.blur();
+    startLogoutTimer()
     containerApp.style.opacity = 100;
   }
 })
